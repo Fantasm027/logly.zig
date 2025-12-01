@@ -51,7 +51,7 @@ pub const Rotation = struct {
             .interval = interval,
             .size_limit = size_limit,
             .retention = retention,
-            .last_rotation = std.time.timestamp(),
+            .last_rotation = @divFloor(std.time.milliTimestamp(), 1000),
         };
     }
 
@@ -64,7 +64,7 @@ pub const Rotation = struct {
 
         // Check time-based rotation
         if (self.interval) |interval| {
-            const now = std.time.timestamp();
+            const now = @divFloor(std.time.milliTimestamp(), 1000);
             if (now - self.last_rotation >= interval.seconds()) {
                 should_rotate = true;
             }
@@ -80,7 +80,7 @@ pub const Rotation = struct {
 
         if (should_rotate) {
             try self.rotate(file_ptr);
-            self.last_rotation = std.time.timestamp();
+            self.last_rotation = @divFloor(std.time.milliTimestamp(), 1000);
         }
     }
 
@@ -88,7 +88,7 @@ pub const Rotation = struct {
         file_ptr.close();
 
         // Generate rotated filename with timestamp
-        const now = std.time.timestamp();
+        const now = @divFloor(std.time.milliTimestamp(), 1000);
         const rotated_name = try std.fmt.allocPrint(
             self.allocator,
             "{s}_{d}",

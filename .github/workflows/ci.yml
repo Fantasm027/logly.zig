@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        zig-version: ['0.15.1', 'master']
+        zig-version: ['0.15.1']
     
     runs-on: ${{ matrix.os }}
     
@@ -34,6 +34,8 @@ jobs:
         zig build example-json_logging
         zig build example-callbacks
         zig build example-context
+        zig build example-custom_colors
+        zig build example-async_logging
     
     - name: Check formatting
       run: zig fmt --check src/ examples/

@@ -1,13 +1,18 @@
 <div align="center">
+<img src="https://github.com/user-attachments/assets/565fc3dc-dd2c-47a6-bab6-2f545c551f26" alt="logly logo" width="400" />
 
-# logly.zig
+<a href="https://muhammad-fiaz.github.io/logly.zig/"><img src="https://img.shields.io/badge/docs-muhammad--fiaz.github.io-blue" alt="Documentation"></a>
+<a href="https://ziglang.org/"><img src="https://img.shields.io/badge/Zig-0.15.1-orange.svg?logo=zig" alt="Zig Version"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig"><img src="https://img.shields.io/github/stars/muhammad-fiaz/logly.zig" alt="GitHub stars"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig/issues"><img src="https://img.shields.io/github/issues/muhammad-fiaz/logly.zig" alt="GitHub issues"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig/pulls"><img src="https://img.shields.io/github/issues-pr/muhammad-fiaz/logly.zig" alt="GitHub pull requests"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig"><img src="https://img.shields.io/github/last-commit/muhammad-fiaz/logly.zig" alt="GitHub last commit"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig"><img src="https://img.shields.io/github/license/muhammad-fiaz/logly.zig" alt="License"></a>
+<a href="https://github.com/muhammad-fiaz/logly.zig/actions/workflows/ci.yml"><img src="https://github.com/muhammad-fiaz/logly.zig/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
 
-[![CI](https://github.com/muhammad-fiaz/logly.zig/actions/workflows/ci.yml/badge.svg)](https://github.com/muhammad-fiaz/logly.zig/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub issues](https://img.shields.io/github/issues/muhammad-fiaz/logly.zig)](https://github.com/muhammad-fiaz/logly.zig/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/muhammad-fiaz/logly.zig)](https://github.com/muhammad-fiaz/logly.zig/pulls)
-[![GitHub stars](https://img.shields.io/github/stars/muhammad-fiaz/logly.zig?style=social)](https://github.com/muhammad-fiaz/logly.zig/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/muhammad-fiaz/logly.zig)](https://github.com/muhammad-fiaz/logly.zig/commits/main)
+<p><em>High-performance, structured logging library for Zig.</em></p>
+
+**📚 [Documentation](https://muhammad-fiaz.github.io/logly.zig/) | [API Reference](https://muhammad-fiaz.github.io/logly.zig/api/logger) | [Quick Start](https://muhammad-fiaz.github.io/logly.zig/guide/quick-start)**
 
 </div>
 
