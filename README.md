@@ -286,7 +286,6 @@ Full documentation is available at: https://muhammad-fiaz.github.io/logly.zig
 | File Rotation   | ✓            | ✓            | ✓                   |
 | JSON Logging    | ✓            | ✓            | ✓                   |
 | Custom Colors   | ✓            | ✓            | ✓                   |
-| GPU Support (experimental)    |  ✗        | ✓            | ✗                   |
 | Simplified API | ✓            |       ✓        | ✓                   |
 
 ## Contributing
