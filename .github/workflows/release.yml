@@ -59,7 +59,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ${{ contains(matrix.target, 'windows') && format('logly-{0}.lib', matrix.target) || format('liblogly-{0}.a', matrix.target) }}
