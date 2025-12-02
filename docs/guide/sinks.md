@@ -46,7 +46,7 @@ _ = try logger.addSink(.{
 ## Sink Configuration
 
 | Option | Type | Default | Description |
-| ~ | ~ | ~ | ~ |
+|--------|------|---------|-------------|
 | `path` | `?[]const u8` | `null` | Path to the log file (null for console) |
 | `rotation` | `?[]const u8` | `null` | Rotation interval ("hourly", "daily", etc.) |
 | `size_limit` | `?u64` | `null` | Max file size in bytes for rotation |
