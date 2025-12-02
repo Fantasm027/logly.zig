@@ -57,14 +57,9 @@ jobs:
         run: mv zig-out/lib/liblogly.a liblogly-${{ matrix.target }}.a
 
       - name: Upload Artifact
-        uses: actions/upload-release-asset@v1
+        run: gh release upload ${{ github.event.release.tag_name }} ${{ contains(matrix.target, 'windows') && format('logly-{0}.lib', matrix.target) || format('liblogly-{0}.a', matrix.target) }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ contains(matrix.target, 'windows') && format('logly-{0}.lib', matrix.target) || format('liblogly-{0}.a', matrix.target) }}
-          asset_name: ${{ contains(matrix.target, 'windows') && format('logly-{0}.lib', matrix.target) || format('liblogly-{0}.a', matrix.target) }}
-          asset_content_type: application/octet-stream
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
   update-release:
     name: Update Release Description
@@ -112,17 +107,17 @@ jobs:
 
             | Platform | Architecture | File |
             |----------|--------------|------|
-            | Windows | x86_64 | [logly-x86_64-windows.lib] |
-            | Windows | x86 | [logly-x86-windows.lib] |
-            | Linux | x86_64 | [liblogly-x86_64-linux.a] |
-            | Linux | x86 | [liblogly-x86-linux.a] |
-            | Linux | aarch64 (ARM64) | [liblogly-aarch64-linux.a] |
-            | macOS | x86_64 (Intel) | [liblogly-x86_64-macos.a] |
-            | macOS | aarch64 (Apple Silicon) | [liblogly-aarch64-macos.a] |
-            | Bare Metal | x86_64 | [liblogly-x86_64-freestanding.a] |
-            | Bare Metal | aarch64 | [liblogly-aarch64-freestanding.a] |
-            | Bare Metal | RISC-V 64 | [liblogly-riscv64-freestanding.a] |
-            | Bare Metal | ARM | [liblogly-arm-freestanding.a] |
+            | Windows | x86_64 | [logly-x86_64-windows.lib](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/logly-x86_64-windows.lib) |
+            | Windows | x86 | [logly-x86-windows.lib](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/logly-x86-windows.lib) |
+            | Linux | x86_64 | [liblogly-x86_64-linux.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-x86_64-linux.a) |
+            | Linux | x86 | [liblogly-x86-linux.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-x86-linux.a) |
+            | Linux | aarch64 (ARM64) | [liblogly-aarch64-linux.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-aarch64-linux.a) |
+            | macOS | x86_64 (Intel) | [liblogly-x86_64-macos.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-x86_64-macos.a) |
+            | macOS | aarch64 (Apple Silicon) | [liblogly-aarch64-macos.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-aarch64-macos.a) |
+            | Bare Metal | x86_64 | [liblogly-x86_64-freestanding.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-x86_64-freestanding.a) |
+            | Bare Metal | aarch64 | [liblogly-aarch64-freestanding.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-aarch64-freestanding.a) |
+            | Bare Metal | RISC-V 64 | [liblogly-riscv64-freestanding.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-riscv64-freestanding.a) |
+            | Bare Metal | ARM | [liblogly-arm-freestanding.a](https://github.com/muhammad-fiaz/logly.zig/releases/download/${{ github.event.release.tag_name }}/liblogly-arm-freestanding.a) |
 
             ### 🛠️ Using Prebuilt Libraries
 
