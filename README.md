@@ -30,6 +30,8 @@
 
 A production-grade, high-performance structured logging library for Zig, designed with a clean, intuitive, and developer-friendly API.
 
+---
+
 <details>
 <summary><strong>✨ Features of Logly</strong> (click to expand)</summary>
 
@@ -63,6 +65,13 @@ A production-grade, high-performance structured logging library for Zig, designe
 
 </details>
 
+----
+
+<details>
+<summary><strong>📌 Prerequisites & Supported Platforms</strong> (click to expand)</summary>
+
+<br>
+
 ## Prerequisites
 
 Before installing Logly, ensure you have the following:
@@ -75,6 +84,8 @@ Before installing Logly, ensure you have the following:
 
 > **Tip:** Verify your Zig installation by running `zig version` in your terminal.
 
+---
+
 ## Supported Platforms
 
 Logly.Zig supports a wide range of platforms and architectures:
@@ -84,17 +95,23 @@ Logly.Zig supports a wide range of platforms and architectures:
 | **Windows** | x86_64, x86 | ✅ Full support |
 | **Linux** | x86_64, x86, aarch64 | ✅ Full support |
 | **macOS** | x86_64, aarch64 (Apple Silicon) | ✅ Full support |
-| **Bare Metal/Freestanding** | x86_64, aarch64, arm, riscv64 | ✅ Full support |
+| **Bare Metal / Freestanding** | x86_64, aarch64, arm, riscv64 | ✅ Full support |
+
+---
 
 ### Color Support
 
 | Terminal | Platform | Support |
 |----------|----------|---------|
 | **Windows Terminal** | Windows 10+ | ✅ Native ANSI |
-| **cmd.exe** | Windows 10+ | ✅ Requires enable call |
+| **cmd.exe** | Windows 10+ | ⚠️ Requires `enableAnsiColors()` |
 | **iTerm2, Terminal.app** | macOS | ✅ Native |
 | **GNOME Terminal, Konsole** | Linux | ✅ Native |
 | **VS Code Terminal** | All | ✅ Native |
+
+</details>
+
+---
 
 ## Installation
 
