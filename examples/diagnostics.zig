@@ -17,7 +17,7 @@ pub fn main() !void {
         config.emit_system_diagnostics_on_init = true; // Emit during init
         config.include_drive_diagnostics = true; // Include drive info
         config.log_format = "[{level:>5}] {message}";
-        config.use_colors = true; // Enable colors
+        config.color = true; // Enable colors
 
         const logger = try logly.Logger.initWithConfig(allocator, config);
         defer logger.deinit();
@@ -30,7 +30,7 @@ pub fn main() !void {
     std.debug.print("─────────────────────────────────────────────────────────\n", .{});
     {
         var config = logly.Config.default();
-        config.use_colors = true;
+        config.color = true;
         config.log_format = "[{timestamp:s}] {level:>5} | {message}";
 
         const logger = try logly.Logger.initWithConfig(allocator, config);
@@ -47,7 +47,7 @@ pub fn main() !void {
     {
         var config = logly.Config.default();
         config.include_drive_diagnostics = true; // Include all drives
-        config.use_colors = true;
+        config.color = true;
         config.log_format = "[{level:>5}] {message}";
 
         const logger = try logly.Logger.initWithConfig(allocator, config);
@@ -63,7 +63,7 @@ pub fn main() !void {
     {
         var config = logly.Config.default();
         config.include_drive_diagnostics = false; // No drive info for cleaner output
-        config.use_colors = true;
+        config.color = true;
         // Custom format using diagnostic context fields
         config.log_format = "🖥️  {diag.os} | 🏗️  {diag.arch} | 💻 {diag.cpu} | ⚙️  Cores: {diag.cores}";
 
@@ -79,7 +79,7 @@ pub fn main() !void {
     std.debug.print("─────────────────────────────────────────────────────────\n", .{});
     {
         var config = logly.Config.default();
-        config.use_colors = true;
+        config.color = true;
         // Format to show memory information
         config.log_format = "🧠 Total RAM: {diag.ram_total_mb} MB | Available: {diag.ram_avail_mb} MB";
 
@@ -96,7 +96,7 @@ pub fn main() !void {
     {
         var config = logly.Config.default();
         config.include_drive_diagnostics = true;
-        config.use_colors = true;
+        config.color = true;
 
         const logger = try logly.Logger.initWithConfig(allocator, config);
         defer logger.deinit();
@@ -148,26 +148,17 @@ pub fn main() !void {
     std.debug.print("─────────────────────────────────────────────────────────\n", .{});
     {
         var config = logly.Config.default();
-        config.use_colors = true;
-        config.log_level = .debug; // Show more detail
+        config.color = true;
+        config.level = .debug; // Show more detail
         config.log_format = "[{level:>5}] {timestamp:s} → {message}";
 
         const logger = try logly.Logger.initWithConfig(allocator, config);
         defer logger.deinit();
 
-        try logger.info("System diagnostics with full coloring enabled", .{});
+        try logger.info("System diagnostics with full coloring enabled", @src());
         try logger.logSystemDiagnostics(@src());
         std.debug.print("\n✓ Colors applied to all output\n", .{});
     }
 
-    std.debug.print("Features demonstrated:\n", .{});
-    std.debug.print("  ✓ Auto-emit diagnostics at logger init\n", .{});
-    std.debug.print("  ✓ On-demand diagnostics collection\n", .{});
-    std.debug.print("  ✓ Drive information (Windows/Linux)\n", .{});
-    std.debug.print("  ✓ Custom formatting with diagnostic fields\n", .{});
-    std.debug.print("  ✓ Memory information display\n", .{});
-    std.debug.print("  ✓ Comprehensive system info table\n", .{});
-    std.debug.print("  ✓ Programmatic diagnostics collection\n", .{});
-    std.debug.print("  ✓ Color-coded output\n", .{});
     std.debug.print("\n", .{});
 }

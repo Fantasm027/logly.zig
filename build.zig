@@ -75,6 +75,26 @@ pub fn build(b: *std.Build) void {
         run_step.dependOn(&run_exe.step);
     }
 
+    // Create run-all-examples step that runs all examples sequentially
+    const run_all_examples = b.step("run-all-examples", "Run all examples sequentially");
+    inline for (examples) |example| {
+        const exe = b.addExecutable(.{
+            .name = "run-all-" ++ example.name,
+            .root_module = b.createModule(.{
+                .root_source_file = b.path(example.path),
+                .target = target,
+                .optimize = optimize,
+            }),
+        });
+        exe.root_module.addImport("logly", logly_module);
+
+        const install_exe = b.addInstallArtifact(exe, .{});
+        const run_exe = b.addRunArtifact(exe);
+        run_exe.step.dependOn(&install_exe.step);
+
+        run_all_examples.dependOn(&run_exe.step);
+    }
+
     // Unit tests
     const tests = b.addTest(.{
         .root_module = b.createModule(.{

@@ -310,8 +310,8 @@ pub const Compression = struct {
 
         if (self.config.algorithm == .none or data.len == 0) {
             const copy = try self.allocator.dupe(u8, data);
-            self.stats.bytes_before += data.len;
-            self.stats.bytes_after += data.len;
+            _ = self.stats.bytes_before.fetchAdd(@intCast(data.len), .monotonic);
+            _ = self.stats.bytes_after.fetchAdd(@intCast(data.len), .monotonic);
             return copy;
         }
 
@@ -342,9 +342,9 @@ pub const Compression = struct {
             },
         }
 
-        self.stats.bytes_before += data.len;
-        self.stats.bytes_after += result.items.len;
-        self.stats.files_compressed += 1;
+        _ = self.stats.bytes_before.fetchAdd(@intCast(data.len), .monotonic);
+        _ = self.stats.bytes_after.fetchAdd(@intCast(result.items.len), .monotonic);
+        _ = self.stats.files_compressed.fetchAdd(1, .monotonic);
 
         return result.toOwnedSlice(self.allocator);
     }
@@ -499,7 +499,7 @@ pub const Compression = struct {
                 const size_bytes = data[0..4].*;
                 const original_size = std.mem.bytesToValue(u32, &size_bytes);
                 if (data.len >= 4 + original_size) {
-                    self.stats.files_decompressed += 1;
+                    _ = self.stats.files_decompressed.fetchAdd(1, .monotonic);
                     return self.allocator.dupe(u8, data[4..][0..original_size]);
                 }
             }
@@ -518,7 +518,7 @@ pub const Compression = struct {
         const stored_checksum = std.mem.bytesToValue(u32, data[8..12]);
 
         if (original_size == 0) {
-            self.stats.files_decompressed += 1;
+            _ = self.stats.files_decompressed.fetchAdd(1, .monotonic);
             return self.allocator.alloc(u8, 0);
         }
 
@@ -582,7 +582,7 @@ pub const Compression = struct {
             }
         }
 
-        self.stats.files_decompressed += 1;
+        _ = self.stats.files_decompressed.fetchAdd(1, .monotonic);
         return result.toOwnedSlice(self.allocator);
     }
 
@@ -639,7 +639,7 @@ pub const Compression = struct {
 
         // Get original file size
         const input_file = std.fs.cwd().openFile(input_path, .{}) catch |err| {
-            self.stats.compression_errors += 1;
+            _ = self.stats.compression_errors.fetchAdd(1, .monotonic);
             return .{
                 .success = false,
                 .original_size = 0,
@@ -666,7 +666,7 @@ pub const Compression = struct {
         self.mutex.unlock(); // Unlock for nested call
         const compressed = self.compress(content) catch |err| {
             self.mutex.lock();
-            self.stats.compression_errors += 1;
+            _ = self.stats.compression_errors.fetchAdd(1, .monotonic);
             return .{
                 .success = false,
                 .original_size = original_size,
@@ -680,7 +680,7 @@ pub const Compression = struct {
 
         // Write compressed file
         const output_file = std.fs.cwd().createFile(out_path, .{}) catch |err| {
-            self.stats.compression_errors += 1;
+            _ = self.stats.compression_errors.fetchAdd(1, .monotonic);
             return .{
                 .success = false,
                 .original_size = original_size,
@@ -698,8 +698,8 @@ pub const Compression = struct {
             std.fs.cwd().deleteFile(input_path) catch {};
         }
 
-        self.stats.files_compressed += 1;
-        self.stats.last_compression_time = std.time.milliTimestamp();
+        _ = self.stats.files_compressed.fetchAdd(1, .monotonic);
+        self.stats.last_compression_time.store(@intCast(std.time.milliTimestamp()), .monotonic);
 
         const result_path = try self.allocator.dupe(u8, out_path);
 
@@ -975,9 +975,9 @@ test "compression stats" {
     defer allocator.free(compressed);
 
     const stats = comp.getStats();
-    try std.testing.expect(stats.bytes_before > 0);
-    try std.testing.expect(stats.bytes_after > 0);
-    try std.testing.expect(stats.files_compressed > 0);
+    try std.testing.expect(stats.bytes_before.load(.monotonic) > 0);
+    try std.testing.expect(stats.bytes_after.load(.monotonic) > 0);
+    try std.testing.expect(stats.files_compressed.load(.monotonic) > 0);
 }
 
 test "compression presets" {
