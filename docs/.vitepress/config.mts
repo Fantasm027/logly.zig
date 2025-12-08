@@ -41,19 +41,29 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Features',
+        text: 'Core Features',
         items: [
           { text: 'File Rotation', link: '/guide/rotation' },
           { text: 'JSON Logging', link: '/guide/json' },
           { text: 'Context Binding', link: '/guide/context' },
           { text: 'Callbacks', link: '/guide/callbacks' },
+          { text: 'Source Location', link: '/guide/source-location' }
+        ]
+      },
+      {
+        text: 'Advanced Features',
+        items: [
           { text: 'Async Logging', link: '/guide/async' },
           { text: 'Compression', link: '/guide/compression' },
           { text: 'Thread Pool', link: '/guide/thread-pool' },
           { text: 'Scheduler', link: '/guide/scheduler' },
+          { text: 'Arena Allocation', link: '/guide/arena-allocation' }
+        ]
+      },
+      {
+        text: 'System & Operations',
+        items: [
           { text: 'System Diagnostics', link: '/guide/diagnostics' },
-          { text: 'Source Location', link: '/guide/source-location' },
-          { text: 'Arena Allocation', link: '/guide/arena-allocation' },
           { text: 'Update Checker', link: '/guide/update-checker' }
         ]
       },
@@ -76,7 +86,7 @@ export default defineConfig({
           { text: 'Level', link: '/api/level' },
           { text: 'Sink', link: '/api/sink' },
           { text: 'Record', link: '/api/record' },
-          { text: 'Async', link: '/api/async' },
+          { text: 'Async Queue', link: '/api/async' },
           { text: 'Compression', link: '/api/compression' },
           { text: 'Thread Pool', link: '/api/thread-pool' },
           { text: 'Scheduler', link: '/api/scheduler' },
@@ -85,12 +95,13 @@ export default defineConfig({
         ]
       },
       {
-        text: 'Examples',
+        text: 'Code Examples',
         items: [
           { text: 'Basic Usage', link: '/examples/basic' },
           { text: 'File Logging', link: '/examples/file-logging' },
           { text: 'Rotation', link: '/examples/rotation' },
           { text: 'JSON Logging', link: '/examples/json' },
+          { text: 'JSON Extended', link: '/examples/json-extended' },
           { text: 'Custom Colors', link: '/examples/custom-colors' },
           { text: 'Color Control', link: '/examples/color-control' },
           { text: 'Context', link: '/examples/context' },
@@ -98,17 +109,27 @@ export default defineConfig({
           { text: 'Async Logging', link: '/examples/async-logging' },
           { text: 'Advanced Config', link: '/examples/advanced-config' },
           { text: 'Module Levels', link: '/examples/module-levels' },
+          { text: 'Custom Levels Full', link: '/examples/custom-levels-full' },
           { text: 'Sink Formats', link: '/examples/sink-formats' },
           { text: 'Formatted Logging', link: '/examples/formatted-logging' },
-          { text: 'Extended JSON', link: '/examples/json-extended' },
           { text: 'Time Formatting', link: '/examples/time' },
           { text: 'Filtering', link: '/examples/filtering' },
           { text: 'Sampling', link: '/examples/sampling' },
           { text: 'Redaction', link: '/examples/redaction' },
           { text: 'Metrics', link: '/examples/metrics' },
           { text: 'Tracing', link: '/examples/tracing' },
+          { text: 'Compression', link: '/examples/compression' },
+          { text: 'Thread Pool', link: '/examples/thread-pool' },
+          { text: 'Scheduler', link: '/examples/scheduler' },
+          { text: 'Scheduler Demo', link: '/examples/scheduler-demo' },
+          { text: 'Thread Pool Arena', link: '/examples/thread-pool-arena' },
+          { text: 'Async Advanced', link: '/examples/async-advanced' },
+          { text: 'Compression Demo', link: '/examples/compression-demo' },
+          { text: 'Dynamic Path', link: '/examples/dynamic-path' },
+          { text: 'Sink Write Modes', link: '/examples/sink-write-modes' },
           { text: 'Production Config', link: '/examples/production-config' },
-          { text: 'Diagnostics', link: '/examples/diagnostics' }
+          { text: 'Diagnostics', link: '/examples/diagnostics' },
+          { text: 'Customizations', link: '/examples/customizations' }
         ]
       },
     ],
