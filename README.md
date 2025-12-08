@@ -30,6 +30,9 @@
 
 A production-grade, high-performance structured logging library for Zig, designed with a clean, intuitive, and developer-friendly API.
 
+
+**⭐️ If you love `logly.zig`, make sure to give it a star! ⭐️**
+
 ---
 
 <details>
