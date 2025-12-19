@@ -15,30 +15,8 @@ const BenchmarkResult = struct {
     max_latency_ns: u64,
     notes: []const u8,
     category: []const u8,
-};
 
-/// Number of warmup iterations
-const WARMUP_ITERATIONS: u64 = 100;
-
-/// Number of benchmark iterations
-const BENCHMARK_ITERATIONS: u64 = 10_000;
-
-/// Number of iterations for multi-thread benchmarks
-const MT_BENCHMARK_ITERATIONS: u64 = 5_000;
-
-/// Null device path for discarding output
-const NULL_PATH = if (builtin.os.tag == .windows) "NUL" else "/dev/null";
-
-/// Print benchmark results in a formatted table by category
-fn printResults(results: []const BenchmarkResult) void {
-    std.debug.print("\n", .{});
-    std.debug.print("=" ** 130, .{});
-    std.debug.print("\n", .{});
-    std.debug.print("                                      LOGLY-ZIG BENCHMARK RESULTS (v0.0.4)\n", .{});
-    std.debug.print("=" ** 130, .{});
-    std.debug.print("\n", .{});
-
-    // Group by category - using ASCII instead of Unicode emojis
+    // Static categories for grouping
     const categories = [_][]const u8{
         "Basic Logging",
         "JSON Logging",
@@ -53,8 +31,30 @@ fn printResults(results: []const BenchmarkResult) void {
         "Multi-Threading",
         "Performance Comparison",
     };
+};
 
-    for (categories) |cat| {
+/// Number of warmup iterations
+const WARMUP_ITERATIONS: u64 = 100;
+
+/// Number of benchmark iterations
+const BENCHMARK_ITERATIONS: u64 = 10_000;
+
+/// Number of iterations for multi-thread benchmarks
+const MT_BENCHMARK_ITERATIONS: u64 = 5_000;
+
+/// Null device path for discarding output
+const NULL_PATH = if (builtin.os.tag == .windows) "NUL" else "/dev/null";
+
+/// Print benchmark results in a formatted table by category (Console only)
+fn printResults(results: []const BenchmarkResult) void {
+    std.debug.print("\n", .{});
+    std.debug.print("=" ** 130, .{});
+    std.debug.print("\n", .{});
+    std.debug.print("                                      LOGLY.ZIG BENCHMARK RESULTS\n", .{});
+    std.debug.print("=" ** 130, .{});
+    std.debug.print("\n", .{});
+
+    for (BenchmarkResult.categories) |cat| {
         var has_category = false;
         for (results) |r| {
             if (std.mem.eql(u8, r.category, cat)) {
@@ -302,20 +302,6 @@ pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
-
-    // Enable ANSI colors for Windows console
-    _ = logly.Terminal.enableAnsiColors();
-
-    std.debug.print("\n", .{});
-    std.debug.print("================================================================================\n", .{});
-    std.debug.print("                  LOGLY-ZIG COMPREHENSIVE BENCHMARKS (v0.0.4)\n", .{});
-    std.debug.print("================================================================================\n", .{});
-    std.debug.print("   Platform: {s}\n", .{@tagName(builtin.os.tag)});
-    std.debug.print("   Architecture: {s}\n", .{@tagName(builtin.cpu.arch)});
-    std.debug.print("   Warmup iterations: {d}\n", .{WARMUP_ITERATIONS});
-    std.debug.print("   Benchmark iterations: {d}\n", .{BENCHMARK_ITERATIONS});
-    std.debug.print("   Multi-thread iterations: {d} per thread\n", .{MT_BENCHMARK_ITERATIONS});
-    std.debug.print("================================================================================\n\n", .{});
 
     var results: std.ArrayList(BenchmarkResult) = .empty;
     defer results.deinit(allocator);
@@ -1172,10 +1158,10 @@ pub fn main() !void {
         try results.append(allocator, runBenchmark("Compression enabled (fast)", benchSimpleLog, &ctxComp, "Deflate compression", "Performance Comparison"));
     }
 
-    // Print all results
+    // Print all results to console
     printResults(results.items);
 
-    // Print summary statistics
+    // Summary Statistics
     std.debug.print("\n[BENCHMARK SUMMARY]\n", .{});
     std.debug.print("=" ** 60, .{});
     std.debug.print("\n", .{});
@@ -1200,13 +1186,15 @@ pub fn main() !void {
         }
     }
 
+    const avg_ops = if (count > 0) total_ops / @as(f64, @floatFromInt(count)) else 0;
+    const avg_latency = if (avg_ops > 0) 1_000_000_000.0 / avg_ops else 0;
+
     if (count > 0) {
-        const avg_ops = total_ops / @as(f64, @floatFromInt(count));
         std.debug.print("\nTotal benchmarks run:     {d}\n", .{count});
         std.debug.print("Average throughput:       {d:.0} ops/sec\n", .{avg_ops});
         std.debug.print("Maximum throughput:       {d:.0} ops/sec ({s})\n", .{ max_ops, max_name });
         std.debug.print("Minimum throughput:       {d:.0} ops/sec ({s})\n", .{ min_ops, min_name });
-        std.debug.print("Average latency:          {d:.0} ns\n", .{1_000_000_000.0 / avg_ops});
+        std.debug.print("Average latency:          {d:.0} ns\n", .{avg_latency});
     }
 
     std.debug.print("\n", .{});
@@ -1214,19 +1202,86 @@ pub fn main() !void {
     std.debug.print("\n", .{});
     std.debug.print("[OK] Benchmarks completed successfully!\n\n", .{});
 
-    // Print markdown table for README
-    std.debug.print("\n[MARKDOWN TABLE FOR README.md]\n", .{});
-    std.debug.print("=" ** 60, .{});
-    std.debug.print("\n\n", .{});
-    std.debug.print("| Benchmark | Ops/sec | Avg Latency (ns) | Notes |\n", .{});
-    std.debug.print("|-----------|---------|------------------|-------|\n", .{});
-    for (results.items) |r| {
-        std.debug.print("| {s} | {d:.0} | {d:.0} | {s} |\n", .{
-            r.name,
-            r.ops_per_sec,
-            r.avg_latency_ns,
-            r.notes,
-        });
+    // Write final Markdown report
+    const md_file = std.fs.cwd().createFile("benchmark-results.md", .{}) catch |err| {
+        std.debug.print("Warning: Could not create benchmark-results.md: {}\n", .{err});
+        return;
+    };
+    defer md_file.close();
+
+    const md_header =
+        \\# 📊 LOGLY.ZIG BENCHMARK RESULTS
+        \\
+        \\**Environment Details:**
+        \\- **Platform:** {s}
+        \\- **Architecture:** {s}
+        \\- **Warmup Iterations:** {d}
+        \\- **Benchmark Iterations:** {d}
+        \\- **Multi-thread Iterations:** {d} per thread
+        \\
+        \\
+    ;
+
+    var header_buf: [1024]u8 = undefined;
+    const header = std.fmt.bufPrint(&header_buf, md_header, .{
+        @tagName(builtin.os.tag),
+        @tagName(builtin.cpu.arch),
+        WARMUP_ITERATIONS,
+        BENCHMARK_ITERATIONS,
+        MT_BENCHMARK_ITERATIONS,
+    }) catch "";
+    try md_file.writeAll(header);
+
+    // Write categorized tables
+    for (BenchmarkResult.categories) |cat| {
+        var has_category = false;
+        for (results.items) |r| {
+            if (std.mem.eql(u8, r.category, cat)) {
+                has_category = true;
+                break;
+            }
+        }
+        if (!has_category) continue;
+
+        const cat_md = std.fmt.allocPrint(allocator,
+            \\
+            \\<details>
+            \\<summary><strong>{s}</strong></summary>
+            \\
+            \\| Benchmark | Ops/sec (higher is better) | Avg Latency (ns) (lower is better) | Notes |
+            \\| :--- | :--- | :--- | :--- |
+        , .{cat}) catch continue;
+        defer allocator.free(cat_md);
+        try md_file.writeAll(cat_md);
+
+        for (results.items) |r| {
+            if (std.mem.eql(u8, r.category, cat)) {
+                var line_buf: [1024]u8 = undefined;
+                const line = std.fmt.bufPrint(&line_buf, "| {s} | {d:.0} | {d:.0} | {s} |\n", .{
+                    r.name,
+                    r.ops_per_sec,
+                    r.avg_latency_ns,
+                    r.notes,
+                }) catch continue;
+                try md_file.writeAll(line);
+            }
+        }
+        try md_file.writeAll("</details>\n");
     }
-    std.debug.print("\n", .{});
+
+    // Write summary to Markdown
+    if (count > 0) {
+        try md_file.writeAll("\n## 📈 BENCHMARK SUMMARY\n\n");
+        var summary_buf: [1024]u8 = undefined;
+        const summary = std.fmt.bufPrint(&summary_buf,
+            \\- **Total benchmarks run:** {d}
+            \\- **Average throughput:** {d:.0} ops/sec
+            \\- **Maximum throughput:** {d:.0} ops/sec ({s})
+            \\- **Minimum throughput:** {d:.0} ops/sec ({s})
+            \\- **Average latency:** {d:.0} ns
+            \\
+        , .{ count, avg_ops, max_ops, max_name, min_ops, min_name, avg_latency }) catch "";
+        try md_file.writeAll(summary);
+    }
+
 }

@@ -116,7 +116,7 @@ pub fn main() !void {
 }
 ```
 
-## Why Logly-Zig?
+## Why Logly.Zig?
 
 - **Production Ready**: Battle-tested features from Rust Logly, reimplemented in Zig
 - **Zero Dependencies**: Pure Zig implementation with no external dependencies

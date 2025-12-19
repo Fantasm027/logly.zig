@@ -31,3 +31,4 @@ NUL
 *.exe
 *.lib
 *.a
+benchmark-results.md

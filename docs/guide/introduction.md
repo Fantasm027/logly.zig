@@ -1,6 +1,6 @@
-# What is Logly-Zig?
+# What is Logly.Zig?
 
-Logly-Zig is a high-performance, structured logging library for Zig, engineered to deliver the robust feature set of its Python and Rust counterparts while maximizing native Zig performance and safety guarantees.
+Logly.Zig is a high-performance, structured logging library for Zig, engineered to deliver the robust feature set of its Python and Rust counterparts while maximizing native Zig performance and safety guarantees.
 
 ## Key Features
 
@@ -34,7 +34,7 @@ Logly-Zig is a high-performance, structured logging library for Zig, engineered 
 
 ## Design Philosophy
 
-Logly-Zig is built upon the following core principles:
+Logly.Zig is built upon the following core principles:
 
 1.  **Developer Experience**: An intuitive, Python-inspired API that reduces cognitive load.
 2.  **Uncompromised Performance**: Optimized for high-throughput, low-latency applications.
@@ -44,57 +44,65 @@ Logly-Zig is built upon the following core principles:
 
 ## Comparison with Other Implementations
 
-| Feature            | Python Logly | Rust Logly   | Logly-Zig                |
-| :----------------- | :----------- | :----------- | :----------------------- |
-| **Performance**    | Maturin-Bindings (Fast)        | Native Rust (Faster)         | Native Zig (faster) |
-| **Memory Safety**  | Runtime      | Compile-time | **Compile-time**         |
-| **Async Support**  | ✓            | ✓            | **✓**                    |
-| **File Rotation**  | ✓            | ✓            | **✓**                    |
-| **JSON Logging**   | ✓            | ✓            | **✓**                    |
-| **Custom Colors**  | ✓            | ✓            | **✓**                    |
-| **Simplified API** | ✓            | ✓            | **✓**                    |
-| **Filtering**      | ✓            | ✓            | **✓** (v0.0.3+)          |
-| **Sampling**       | ✗ Coming soon!)            | ✗ (Coming soon!)           | **✓** (v0.0.3+)          |
-| **Redaction**      | ✗ (Coming soon!)             | ✗ (Coming soon!)             | **✓** (v0.0.3+)          |
-| **Metrics**        | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.3+)          |
-| **Tracing**        | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.3+)          |
-| **Compression**    | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.4+)          |
-| **Thread Pool**    | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.4+)          |
-| **Scheduler**      | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.4+)          |
-| **Custom Formats** | ✗ (Coming soon!)           | ✗ (Coming soon!)            | **✓** (v0.0.4+)          |
-| **Cross-Platform Colors** | ✓      | ✓            | **✓** (v0.0.4+ - improved)|
+| Feature                   | Python Logly            | Rust Logly           | Logly.Zig           |
+| :------------------------ | :---------------------- | :------------------- | :------------------ |
+| **Performance**           | Maturin-Bindings (Fast) | Native Rust (Faster) | Native Zig (faster) |
+| **Memory Safety**         | Runtime                 | Compile-time         | **Compile-time**    |
+| **Async Support**         | ✓                       | ✓                    | **✓**               |
+| **File Rotation**         | ✓                       | ✓                    | **✓**               |
+| **JSON Logging**          | ✓                       | ✓                    | **✓**               |
+| **Custom Colors**         | ✓                       | ✓                    | **✓**               |
+| **Simplified API**        | ✓                       | ✓                    | **✓**               |
+| **Filtering**             | ✓                       | ✓                    | **✓**               |
+| **Sampling**              | ✗ Coming soon!)         | ✗ (Coming soon!)     | **✓**               |
+| **Redaction**             | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Metrics**               | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Tracing**               | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Compression**           | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Thread Pool**           | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Scheduler**             | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Custom Formats**        | ✗ (Coming soon!)        | ✗ (Coming soon!)     | **✓**               |
+| **Cross-Platform Colors** | ✓                       | ✓                    | **✓**               |
 
-## Enterprise Features (v0.0.4+)
+## Enterprise Features
 
-Logly-Zig v0.0.4 introduces enterprise-grade features:
+Logly.Zig v0.0.4 introduces enterprise-grade features:
 
 ### 🔍 Filtering
+
 Rule-based log filtering by level, message patterns, or modules.
 
 ### 📊 Sampling
+
 Probability-based sampling, rate limiting, and every-Nth message sampling for high-volume scenarios.
 
 ### 🔒 Redaction
+
 Automatic masking of sensitive data (passwords, API keys, PII) in log messages.
 
 ### 📈 Metrics
+
 Built-in metrics collection for logging performance monitoring.
 
 ### 🔗 Distributed Tracing
+
 OpenTelemetry-compatible trace context propagation with automatic span ID generation.
 
-### 🚀 Arena Allocator (v0.0.4+)
+### 🚀 Arena Allocator
+
 Optional arena allocator support for improved performance in high-throughput scenarios, reducing allocation overhead for temporary formatting operations.
 
-### 🎨 Cross-Platform Colors (v0.0.4+)
+### 🎨 Cross-Platform Colors
+
 Enhanced ANSI color support for Windows, Linux, macOS, and bare metal/freestanding targets.
 
-### 📝 Method Aliases (v0.0.4+)
+### 📝 Method Aliases
+
 Short aliases for common methods: `warn`/`crit` for levels, `add`/`remove`/`clear`/`count` for sink management.
 
-## When to Use Logly-Zig
+## When to Use Logly.Zig
 
-Logly-Zig is perfect for:
+Logly.Zig is perfect for:
 
 - **Production applications** requiring robust logging
 - **High-performance systems** with strict latency requirements
@@ -107,7 +115,6 @@ Logly-Zig is perfect for:
 
 ## Next Steps
 
-- [Getting Started](/guide/getting-started) - Install and set up Logly-Zig
+- [Getting Started](/guide/getting-started) - Install and set up Logly.Zig
 - [Quick Start](/guide/quick-start) - Your first logging program
 - [Configuration](/guide/configuration) - Configure your logger
-
