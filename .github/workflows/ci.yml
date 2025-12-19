@@ -1,21 +1,9 @@
-name: Deploy VitePress site to Pages
+name: CI
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build:
@@ -49,41 +37,6 @@ jobs:
 
       - name: Zig format check
         run: zig fmt --check src/ examples/
-
-      - name: Verify documentation examples compile
-        run: |
-          # Test that code examples in documentation are valid
-          echo "Verifying documentation examples..."
-          zig build example-basic > /dev/null 2>&1 && echo "✓ Basic example compiles"
-          zig build example-json_logging > /dev/null 2>&1 && echo "✓ JSON example compiles"
-          zig build example-custom_levels_full > /dev/null 2>&1 && echo "✓ Custom levels example compiles"
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Clean state
-        working-directory: ./docs
-        run: |
-          rm -f package-lock.json bun.lockb
-          rm -rf node_modules
-
-      - name: Install dependencies
-        working-directory: ./docs
-        run: bun install
-
-      - name: Build with VitePress
-        working-directory: ./docs
-        run: bun run docs:build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
 
   examples-run:
     name: Run Examples Matrix (hostable targets)
@@ -157,16 +110,4 @@ jobs:
         run: zig build -Dtarget=${{ matrix.target }} -Doptimize=Debug || echo "Build may fail for cross-compilation targets, continuing..."
         continue-on-error: true
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
